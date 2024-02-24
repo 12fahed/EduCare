@@ -3,15 +3,21 @@ import cv2
 import numpy as np
 from PIL import Image
 from flask import Flask, render_template, request
+from flask_pymongo import PyMongo
+import gridfs
 
 app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb+srv://fahed:fahed12@admin.gd1pah0.mongodb.net/HTA"
+db = PyMongo(app).db
+fs = gridfs.GridFS(db)
 
 @app.route("/")
-def hello_world():
+def home():
+    
     return render_template("./index.html")
 
-@app.route("/edit", methods=["GET", "POST"])
-def edit():
+@app.route("/collect", methods=["GET", "POST"])
+def collect():
     if request.method == "POST":
         camera=cv2.VideoCapture(0) #to capture video through camera using openCV
         #set() gives width and height in terms of pixels
@@ -45,6 +51,14 @@ def edit():
         
                 #to display the image that is scanned 
                 cv2.imshow("image", img)
+                
+                img_array = gray[b:b+d, a:a+c]  # Extract the face region
+                # Convert the numpy array to binary
+                
+                _, img_encoded = cv2.imencode('.jpg', img_array)
+                # Insert binary data into MongoDB
+                
+                fs.put(img_encoded.tobytes(), filename=f"User.{face_id}.{i}.jpg")
 
             #takes in miliseconds after which it will close, if argument is 0, then it will run until a key is pressed
             x=cv2.waitKey(1) & 0xff
