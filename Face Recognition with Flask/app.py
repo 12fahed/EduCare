@@ -75,35 +75,52 @@ def collect():
         # Training it simultaneously
         
         #path for face image database
-        path='./dataset'
+        # path='./dataset'
 
         recognizer = cv2.face.LBPHFaceRecognizer.create()
 
         detector=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
         #function to get the images and label data
-        def getImagesAndLabels(path):
-            imagePaths=[os.path.join(path, f) for f in os.listdir(path)] #to specify image path using os 
+        def getImagesAndLabels():
+            # imagePaths=[os.path.join(path, f) for f in os.listdir(path)] #to specify image path using os 
             faceSamples=[]
             ids=[]
+            
+        # Get the images from MongoDB
+            for grid_out in fs.find({"filename": {"$regex": f"User.{face_id}"}}):
+                img_bytes = grid_out.read()
+                nparr = np.frombuffer(img_bytes, np.uint8)
+                img_np = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
 
-            for imagePath in imagePaths: #for every imagePath in imagePaths
-                PIL_img=Image.open(imagePath).convert('L') #convert it to grayscale L-Luminiscence
-                img_numpy=np.array(PIL_img, 'uint8') #converts grayscale PIL image into numpy array
-                #uint8 means unsigned integer of 8-bits and stores it in numpy array 
+                # Extract the ID from the filename
+                id = int(grid_out.filename.split(".")[1])
 
-                #split path and file name, and further split and take the 2nd element of it
-                id=int(os.path.split(imagePath)[-1].split(".")[1]) #naming conventions
-                faces=detector.detectMultiScale(img_numpy) 
+                faces = detector.detectMultiScale(img_np)
 
-                for(x,y,w,h) in faces:
-                    faceSamples.append(img_numpy[y:y+h,x:x+w]) #selects only ROI
+                for (x, y, w, h) in faces:
+                    faceSamples.append(img_np[y:y+h, x:x+w])
                     ids.append(id)
 
             return faceSamples, ids
 
+            # for imagePath in imagePaths: #for every imagePath in imagePaths
+            #     PIL_img=Image.open(imagePath).convert('L') #convert it to grayscale L-Luminiscence
+            #     img_numpy=np.array(PIL_img, 'uint8') #converts grayscale PIL image into numpy array
+            #     #uint8 means unsigned integer of 8-bits and stores it in numpy array 
+
+            #     #split path and file name, and further split and take the 2nd element of it
+            #     id=int(os.path.split(imagePath)[-1].split(".")[1]) #naming conventions
+            #     faces=detector.detectMultiScale(img_numpy) 
+
+            #     for(x,y,w,h) in faces:
+            #         faceSamples.append(img_numpy[y:y+h,x:x+w]) #selects only ROI
+            #         ids.append(id)
+
+            # return faceSamples, ids
+
         print ("\n\tTraining faces. It will take a few seconds. Please wait ...")
-        faces, ids = getImagesAndLabels(path) #respective images and user ID
+        faces, ids = getImagesAndLabels() #respective images and user ID
         recognizer.train(faces, np.array(ids)) #trains model with corresponding faces and numpy array of ids
 
         #save the model into trainer/trainer.yml
