@@ -8,7 +8,6 @@ from PIL import Image
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
 import gridfs
-from flask import jsonify
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
@@ -18,7 +17,6 @@ fs = gridfs.GridFS(db)
 
 @app.route("/")
 def home():
-    
     return render_template("./index.html")
 
 @app.route("/collect", methods=["GET", "POST"])
