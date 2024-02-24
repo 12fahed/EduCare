@@ -37,23 +37,44 @@ app.get("/signup", (req, res)=>{
 })
 
 app.post("/signup", async (req, res)=>{
-    const data = {
-        name: req.body.name,
-        password: await hashpass(req.body.password),
-        role: req.body.dropdown
+
+    const existingUser = await collection.findOne({ email: req.body.email });
+    
+    if (existingUser) {
+        return res.send("User Already Exists");
     }
 
-    await collection.insertMany([data])
+    const pass = req.body.password
+    const confirm = req.body.confirm
 
-    res.render("home")
+    if(pass===confirm){
+        const data = {
+            email: req.body.email,
+            password: await hashpass(req.body.password),
+            role: req.body.dropdown,
+            fname: req.body.fname,
+            mname: req.body.mname,
+            lname: req.body.lname,
+            insti: req.body.insti,
+            dob: req.body.dob,
+            phno: req.body.phno
+        }
+    
+        await collection.insertMany([data])
+    
+        res.send("Success")
+    }
+    else{
+        res.send("Mistach Password")
+    }
+    
 })
-
 
 
 app.post("/login", async (req, res)=>{
 
     try{
-        const check = await collection.findOne({name: req.body.name})
+        const check = await collection.findOne({email: req.body.email})
         const role = await collection.findOne({role: req.body.dropdown})
         const passCheck = await compare(req.body.password, check.password)
         

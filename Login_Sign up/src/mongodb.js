@@ -10,7 +10,7 @@ mongoose.connect("mongodb+srv://fahed:fahed12@admin.gd1pah0.mongodb.net/HTA")
 
 
 const LogInScheama = new mongoose.Schema({
-    name: {
+    email: {
         type: String,
         required: true
     },
@@ -19,6 +19,30 @@ const LogInScheama = new mongoose.Schema({
         required: true
     },
     role: {
+        type: String,
+        required: true
+    },
+    phno: {
+        type: Number,
+        required: true
+    },
+    fname: {
+        type: String,
+        required: true
+    },
+    mname: {
+        type: String,
+        required: true
+    },
+    lname: {
+        type: String,
+        required: true
+    },
+    insti: {
+        type: String,
+        required: true
+    },
+    dob: {
         type: String,
         required: true
     }
