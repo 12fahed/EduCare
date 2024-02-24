@@ -1,17 +1,26 @@
+from flask import flash
+import io
 import os
+from datetime import datetime
 import cv2
 import numpy as np
 from PIL import Image
 from flask import Flask, render_template, request
+from flask_pymongo import PyMongo
+import gridfs
 
 app = Flask(__name__)
+app.secret_key = "secret_key"
+app.config["MONGO_URI"] = "mongodb+srv://fahed:fahed12@admin.gd1pah0.mongodb.net/HTA"
+db = PyMongo(app).db
+fs = gridfs.GridFS(db)
 
 @app.route("/")
-def hello_world():
+def home():
     return render_template("./index.html")
 
-@app.route("/edit", methods=["GET", "POST"])
-def edit():
+@app.route("/collect", methods=["GET", "POST"])
+def collect():
     if request.method == "POST":
         camera=cv2.VideoCapture(0) #to capture video through camera using openCV
         #set() gives width and height in terms of pixels
@@ -45,6 +54,14 @@ def edit():
         
                 #to display the image that is scanned 
                 cv2.imshow("image", img)
+                
+                img_array = gray[b:b+d, a:a+c]  # Extract the face region
+                # Convert the numpy array to binary
+                
+                _, img_encoded = cv2.imencode('.jpg', img_array)
+                # Insert binary data into MongoDB
+                
+                fs.put(img_encoded.tobytes(), filename=f"User.{face_id}.{i}.jpg")
 
             #takes in miliseconds after which it will close, if argument is 0, then it will run until a key is pressed
             x=cv2.waitKey(1) & 0xff
@@ -56,38 +73,56 @@ def edit():
         print("\nExiting Program")
         camera.release()
         cv2.destroyAllWindows()
+        
         # Training it simultaneously
         
         #path for face image database
-        path='./dataset'
+        # path='./dataset'
 
         recognizer = cv2.face.LBPHFaceRecognizer.create()
 
         detector=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
         #function to get the images and label data
-        def getImagesAndLabels(path):
-            imagePaths=[os.path.join(path, f) for f in os.listdir(path)] #to specify image path using os 
+        def getImagesAndLabels():
+            # imagePaths=[os.path.join(path, f) for f in os.listdir(path)] #to specify image path using os 
             faceSamples=[]
             ids=[]
+            
+        # Get the images from MongoDB
+            for grid_out in fs.find({}):
+                img_bytes = grid_out.read()
+                nparr = np.frombuffer(img_bytes, np.uint8)
+                img_np = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
 
-            for imagePath in imagePaths: #for every imagePath in imagePaths
-                PIL_img=Image.open(imagePath).convert('L') #convert it to grayscale L-Luminiscence
-                img_numpy=np.array(PIL_img, 'uint8') #converts grayscale PIL image into numpy array
-                #uint8 means unsigned integer of 8-bits and stores it in numpy array 
+                # Extract the ID from the filename
+                id = int(grid_out.filename.split(".")[1])
 
-                #split path and file name, and further split and take the 2nd element of it
-                id=int(os.path.split(imagePath)[-1].split(".")[1]) #naming conventions
-                faces=detector.detectMultiScale(img_numpy) 
+                faces = detector.detectMultiScale(img_np)
 
-                for(x,y,w,h) in faces:
-                    faceSamples.append(img_numpy[y:y+h,x:x+w]) #selects only ROI
+                for (x, y, w, h) in faces:
+                    faceSamples.append(img_np[y:y+h, x:x+w])
                     ids.append(id)
 
             return faceSamples, ids
 
+            # for imagePath in imagePaths: #for every imagePath in imagePaths
+            #     PIL_img=Image.open(imagePath).convert('L') #convert it to grayscale L-Luminiscence
+            #     img_numpy=np.array(PIL_img, 'uint8') #converts grayscale PIL image into numpy array
+            #     #uint8 means unsigned integer of 8-bits and stores it in numpy array 
+
+            #     #split path and file name, and further split and take the 2nd element of it
+            #     id=int(os.path.split(imagePath)[-1].split(".")[1]) #naming conventions
+            #     faces=detector.detectMultiScale(img_numpy) 
+
+            #     for(x,y,w,h) in faces:
+            #         faceSamples.append(img_numpy[y:y+h,x:x+w]) #selects only ROI
+            #         ids.append(id)
+
+            # return faceSamples, ids
+
         print ("\n\tTraining faces. It will take a few seconds. Please wait ...")
-        faces, ids = getImagesAndLabels(path) #respective images and user ID
+        faces, ids = getImagesAndLabels() #respective images and user ID
         recognizer.train(faces, np.array(ids)) #trains model with corresponding faces and numpy array of ids
 
         #save the model into trainer/trainer.yml
@@ -125,6 +160,7 @@ def recognize():
         minH = 0.1*cam.get(4)
 
         i=0
+        marked=False
         while True:
 
             ret, img=cam.read()
@@ -148,9 +184,21 @@ def recognize():
                 id, confidence=recognizer.predict(gray[y:y+h,x:x+w]) 
 
                 #check if confidence is less them 100 ==> "0" is perfect match 
-                if (confidence < 65): #if the picture is recognised
+                if (confidence < 65): #if the picture is recognised             
                     id = names[id]
                     confidence = "  {0}%".format(round(100 - confidence))
+                    
+                    attendance_data = {
+                        "date": datetime.now().strftime("%Y-%m-%d"),
+                        "time": datetime.now().strftime("%H:%M:%S"),
+                        "face_id": id,
+                        "present": True
+                    }
+                    db.attendance.insert_one(attendance_data)
+                    marked=True
+                    flash("Attendance marked successfully!", "success")
+                    break
+                    
                 else: #if the picture is not recognised
                     id = "unknown" 
                     confidence = "  {0}%".format(round(100 - confidence))
@@ -158,6 +206,12 @@ def recognize():
                 #image, string, positioning, font, font scale factor(set to default), thickness
                 cv2.putText(img, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
                 cv2.putText(img, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1)  
+                
+            if marked==True:
+                print("\n\tExiting Program")
+                cam.release()
+                cv2.destroyAllWindows()
+                break
             
             cv2.imshow('camera', img) #showing the camera
 
