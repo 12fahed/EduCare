@@ -47,6 +47,13 @@
 
     <form action="/recognize" method="post" enctype="multipart/form-data">
         <div class="container">
+            <label for="subject">Select a subject:</label>
+            <select id="subject" name="subject">
+                <option value="physics" selected>Physics</option>
+                <option value="chemistry">Chemistry</option>
+                <option value="maths">Maths</option>
+                <option value="biology">Biology</option>
+            </select>
             <button style="font-weight:450" type="submit" class="btn btn-outline-success btn-lg" action="">Recognize Face</button>          
         </div>
     </form>
