@@ -130,6 +130,14 @@ def collect():
 
         #print the numer of faces trained and end program
         print("\n\t{0} faces trained.".format(len(np.unique(ids))))
+        
+        attendance_data = {
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "time": datetime.now().strftime("%H:%M:%S"),
+            "face_id": int(face_id),
+            "attend": {"p": 0, "c": 0, "m": 0, "b": 0} 
+        }
+        db.attendance.insert_one(attendance_data)
 
         
     return render_template("./recognize.html") #return "SUCCESS"
@@ -158,9 +166,9 @@ def recognize():
         #define min window size to be recognized as a face of minimum width and height
         minW = 0.1*cam.get(3)
         minH = 0.1*cam.get(4)
-
-        i=0
+        
         marked=False
+        i=0
         while True:
 
             ret, img=cam.read()
@@ -188,15 +196,35 @@ def recognize():
                     id = names[id]
                     confidence = "  {0}%".format(round(100 - confidence))
                     
-                    attendance_data = {
-                        "date": datetime.now().strftime("%Y-%m-%d"),
-                        "time": datetime.now().strftime("%H:%M:%S"),
-                        "face_id": id,
-                        "present": True
-                    }
-                    db.attendance.insert_one(attendance_data)
-                    marked=True
+                    # attendance_data = {
+                    #     "date": datetime.now().strftime("%Y-%m-%d"),
+                    #     "time": datetime.now().strftime("%H:%M:%S"),
+                    #     "face_id": id,
+                    #     "present": True,
+                    #     "attendence": {"p": 20, "c": 40, "m": 10, "b": 45} 
+                    # }
+                    # db.attendance.insert_one(attendance_data)
+                    document=db.attendance.find_one({"face_id": id})
+                    phy=document.get("attend").get("p")
+                    chem=document.get("attend").get("c")
+                    math=document.get("attend").get("m")
+                    bio=document.get("attend").get("b")
+                    
+                    if request.form['subject']=="physics":
+                        phy=phy+1
+                        
+                    elif request.form['subject']=="chemistry":
+                        chem=chem+1
+                        
+                    elif request.form['subject']=="maths":
+                        math=math+1
+                        
+                    elif request.form['subject']=="biology":
+                        bio=bio+1
+                        
+                    db.attendance.update_one({"face_id": id}, {"$set": {"attend.p": phy, "attend.c": chem, "attend.m": math, "attend.b": bio}})
                     flash("Attendance marked successfully!", "success")
+                    marked=True
                     break
                     
                 else: #if the picture is not recognised
