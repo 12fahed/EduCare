@@ -39,7 +39,8 @@ app.get("/signup", (req, res)=>{
 app.post("/signup", async (req, res)=>{
     const data = {
         name: req.body.name,
-        password: await hashpass(req.body.password)
+        password: await hashpass(req.body.password),
+        role: req.body.dropdown
     }
 
     await collection.insertMany([data])
@@ -47,13 +48,17 @@ app.post("/signup", async (req, res)=>{
     res.render("home")
 })
 
+
+
 app.post("/login", async (req, res)=>{
 
     try{
         const check = await collection.findOne({name: req.body.name})
+        const role = await collection.findOne({role: req.body.dropdown})
         const passCheck = await compare(req.body.password, check.password)
+        
 
-        if(check && passCheck){
+        if( ( check && passCheck ) && role){
             
             res.render("home")
         }

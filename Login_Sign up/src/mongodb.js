@@ -17,9 +17,14 @@ const LogInScheama = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        required: true
     }
 })
 
 const collection = new mongoose.model("userInfo", LogInScheama)
 
 module.exports = collection
+
