@@ -1,13 +1,17 @@
+from flask import flash
 import io
 import os
+from datetime import datetime
 import cv2
 import numpy as np
 from PIL import Image
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
 import gridfs
+from flask import jsonify
 
 app = Flask(__name__)
+app.secret_key = "secret_key"
 app.config["MONGO_URI"] = "mongodb+srv://fahed:fahed12@admin.gd1pah0.mongodb.net/HTA"
 db = PyMongo(app).db
 fs = gridfs.GridFS(db)
@@ -88,7 +92,7 @@ def collect():
             ids=[]
             
         # Get the images from MongoDB
-            for grid_out in fs.find({"filename": {"$regex": f"User.{face_id}"}}):
+            for grid_out in fs.find({}):
                 img_bytes = grid_out.read()
                 nparr = np.frombuffer(img_bytes, np.uint8)
                 img_np = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
@@ -158,6 +162,7 @@ def recognize():
         minH = 0.1*cam.get(4)
 
         i=0
+        marked=False
         while True:
 
             ret, img=cam.read()
@@ -185,6 +190,17 @@ def recognize():
                     id = names[id]
                     confidence = "  {0}%".format(round(100 - confidence))
                     
+                    attendance_data = {
+                        "date": datetime.now().strftime("%Y-%m-%d"),
+                        "time": datetime.now().strftime("%H:%M:%S"),
+                        "face_id": id,
+                        "present": True
+                    }
+                    db.attendance.insert_one(attendance_data)
+                    marked=True
+                    flash("Attendance marked successfully!", "success")
+                    break
+                    
                 else: #if the picture is not recognised
                     id = "unknown" 
                     confidence = "  {0}%".format(round(100 - confidence))
@@ -192,6 +208,12 @@ def recognize():
                 #image, string, positioning, font, font scale factor(set to default), thickness
                 cv2.putText(img, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
                 cv2.putText(img, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1)  
+                
+            if marked==True:
+                print("\n\tExiting Program")
+                cam.release()
+                cv2.destroyAllWindows()
+                break
             
             cv2.imshow('camera', img) #showing the camera
 
