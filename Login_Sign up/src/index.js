@@ -62,7 +62,7 @@ app.post("/signup", async (req, res)=>{
     
         await collection.insertMany([data])
     
-        res.send("Success")
+        res.render("home", { fname: req.body.fname });
     }
     else{
         res.send("Mistach Password")
