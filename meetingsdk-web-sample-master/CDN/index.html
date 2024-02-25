@@ -5,14 +5,53 @@
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200&family=Lora:wght@600&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
     <style>
+        
+        
+        *{
+            padding: 0;margin: 0;
+            font-family: "Poppins",'sans-serif';
+        }
+        .container{
+            width: 500px;
+            height: 50%;
+            padding: 20px;
+            background-color: rgb(226, 226, 229);
+            border-radius: 20px;
+            margin-top: 50px;
+        }
+        .navbar-brand{
+            font-family: "Poppins",'sans-serif';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            grid-auto-rows: minmax(400px, auto);
+        }
+        #display_name {
+             grid-column: 1 / 2;
+             grid-row: 2 / 3;
+        }
+        #meeting_email {
+            grid-column: 5 / 6;
+            grid-row: 2 / 3;
+        }
+
         .sdk-select {
             height: 34px;
             border-radius: 4px;
+            margin: 10px;
         }
 
         .websdktest button {
@@ -30,6 +69,7 @@
             left: 0;
             display: block;
             z-index: 99999;
+            margin: 10px;
         }
 
         #display_name {
@@ -48,30 +88,32 @@
             left: 50%;
             transform: translate(-50%, -50%);
             left: 50%;
-            margin: 0;
+            margin: 10px;
         }
+
     </style>
 
-    <nav id="nav-tool" class="navbar navbar-inverse navbar-fixed-top">
+
+    <nav id="nav-tool" class="navbar navbar-inverse navbar-fixed-top" style="height: 1000px;">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Zoom WebSDK CDN</a>
             </div>
-            <div id="navbar" class="websdktest">
+            <div id="navbar" class="websdktest" style="margin: 10px;">
                 <form class="navbar-form navbar-right" id="meeting_form">
                     <div class="form-group">
                         <input type="text" name="display_name" id="display_name" value="3.1.6#CDN" maxLength="100"
                             placeholder="Name" class="form-control" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="margin: 10px;">
                         <input type="text" name="meeting_number" id="meeting_number" value="" maxLength="200"
                             style="width:150px" placeholder="Meeting Number" class="form-control" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="margin: 10px;">
                         <input type="text" name="meeting_pwd" id="meeting_pwd" value="" style="width:150px"
                             maxLength="32" placeholder="Meeting Password" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="margin: 10px;">
                         <input type="text" name="meeting_email" id="meeting_email" value="" style="width:150px"
                             maxLength="32" placeholder="Email option" class="form-control">
                     </div>
@@ -89,7 +131,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <select id="meeting_lang" class="sdk-select">
+                        <select id="meeting_lang" class="sdk-select" >
                             <option value="en-US">English</option>
                             <option value="de-DE">German Deutsch</option>
                             <option value="es-ES">Spanish Español</option>
@@ -110,10 +152,10 @@
                     </div>
 
                     <input type="hidden" value="" id="copy_link_value" />
-                    <button type="submit" class="btn btn-primary" id="join_meeting">Join</button>
-                    <button type="submit" class="btn btn-primary" id="clear_all">Clear</button>
+                    <button type="submit" class="btn btn-primary" id="join_meeting" style="display: flex; align-items: baseline; justify-content: baseline;margin-right: 90px;">Join</button>
+                    <button type="submit" class="btn btn-primary" id="clear_all" style="margin-left: 30px;">Clear</button>
                     <button type="button" link="" onclick="window.copyJoinLink('#copy_join_link')"
-                        class="btn btn-primary" id="copy_join_link">Copy Direct join link</button>
+                        class="btn btn-primary" id="copy_join_link" style="margin-top: 10px;margin-right: 60px; display: flex;align-items: center;justify-content: center;">Copy Direct join link</button>
 
 
                 </form>

@@ -109,7 +109,7 @@ app.post("/signup", async (req, res)=>{
         console.log(email)
         //NODEMAILER ENDS
 
-        res.render("home", { fname: req.body.fname , email: req.body.email, insti: req.body.insti});
+        res.render("midlogin", { fname: req.body.fname , email: req.body.email, insti: req.body.insti});
     }
     else{
         res.send("Mistach Password")

@@ -25,7 +25,7 @@
     <!-- Attendance -->
     <div class="page d-flex">
       <div class="sidebar bg-white p-20 p-relative">
-        <h3 class="p-relative txt-c mt-0">Sakshi</h3>
+        <h3 class="p-relative txt-c mt-0">Tanmay</h3>
         <ul>
           <li>
             <a class="d-flex align-center fs-14 c-black rad-6 p-10" href="index.html">
@@ -60,7 +60,13 @@
           <li>
             <a class="active d-flex align-center fs-14 c-black rad-6 p-10" href="friends.html">
               <i class="fa-regular fa-circle-user fa-fw"></i>
-              <span>Friends</span>
+              <span>Attendance</span>
+            </a>
+          </li>
+          <li>
+            <a class="active d-flex align-center fs-14 c-black rad-6 p-10" href="/Chart/chart.html" target="_blank">
+              <i class="fa-regular fa-circle-user fa-fw"></i>
+              <span>Records</span>
             </a>
           </li>
           <!-- <li>
@@ -78,25 +84,51 @@
         </ul>
       </div>
 
-<div class="total">
+<div class="total" style="background-color: #2e3267;">
 
 
-     <div class="form">
+     <div class="form" style="background-color: white;display: flex;justify-content: center;align-items: center;">
 
               <form action="/tracker" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Username</label>
+                  <label for="exampleInputEmail1" style="font-family: 'Open Sans','sans-serif'; color: white;
+                  font-size: 15px;
+                  font-weight: 900;
+                  background: #9796f0;
+                  font-family: 'Open sans',sans-serif;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  color: var(--white);
+                  padding: 10px 100px;
+                  margin-top: 15px;
+                
+                  height: 35px;
+                  width: 100%;">Username</label>
                   <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="roll_no">
                 </div>
 
                 <div class="form-group">
-                  <label for="roll_no">Roll Number</label>
+                  <label for="roll_no" style=" color: white;
+                  font-size: 15px;
+                  font-weight: 900;
+                  background: #9796f0;
+                  font-family: 'Open sans',sans-serif;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  color: var(--white);
+                  padding: 10px 100px;
+                  margin-top: 15px;
+                  
+                  height: 35px;
+                  width: 100%;">Roll Number</label>
                   <input name="roll_no" type="text" class="form-control" id="roll_no" placeholder="EG: 20">
                 </div>
 
-                <button type="submit" id="rn-submit" class="btn  btn-primary">Submit</button>
+                <button type="submit" id="rn-submit" class="btn  btn-primary" style="background-color: #2e3267; margin-top: 15px;display: flex;align-items: center;justify-content: center;">Submit</button>
               </form>
-
+     
 
      </div>
 
