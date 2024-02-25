@@ -192,7 +192,7 @@ def recognize():
                 id, confidence=recognizer.predict(gray[y:y+h,x:x+w]) 
 
                 #check if confidence is less them 100 ==> "0" is perfect match 
-                if (confidence < 65): #if the picture is recognised             
+                if (confidence < 70): #if the picture is recognised             
                     id = names[id]
                     confidence = "  {0}%".format(round(100 - confidence))
                     
@@ -255,6 +255,6 @@ def recognize():
         cv2.destroyAllWindows()
     
     
-    return render_template("./index.html")
+    return render_template("./recognize.html")
 
 app.run(debug=True)
