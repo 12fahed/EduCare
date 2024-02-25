@@ -8,7 +8,6 @@ from PIL import Image
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
 import gridfs
-from flask import jsonify
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
@@ -249,20 +248,5 @@ def recognize():
     
     
     return render_template("./recognize.html")
-
-
-@app.route("/tracker", methods=["GET", "POST"])
-def friends():
-    return render_template("friends.html")
-
-@app.route("/tracker_main", methods=["GET", "POST"])
-def tracker_main():
-    if(request.method=="POST"):
-        id=request.form.get("roll_no")
-        document=db.attendance.find_one({"face_id": id})
-        return jsonify(document)
-
-
-    
 
 app.run(debug=True)
