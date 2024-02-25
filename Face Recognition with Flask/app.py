@@ -252,10 +252,17 @@ def recognize():
 
 
 @app.route("/tracker", methods=["GET", "POST"])
-def tracker():
-    # id=request.form.get("roll_no")
-    document=db.attendance.find_one({"face_id": 2})
-    return jsonify(document)
+def friends():
+    return render_template("friends.html")
+
+@app.route("/tracker_main", methods=["GET", "POST"])
+def tracker_main():
+    if(request.method=="POST"):
+        id=request.form.get("roll_no")
+        document=db.attendance.find_one({"face_id": id})
+        return jsonify(document)
+
+
     
 
 app.run(debug=True)

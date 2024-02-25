@@ -13,13 +13,14 @@ async function fetchTrackerData() {
     const cValue = data.attend.c;
     const mValue = data.attend.m;
     const bValue = data.attend.b;
+    console.log(pValue, cValue, mValue, bValue);
 
     // Display the values in the HTML
     const output = `<p>Physics: ${pValue}</p>
                      <p>Chemistry: ${cValue}</p>
                      <p>Maths: ${mValue}</p>
                      <p>Biology: ${bValue}</p>`;
-    document.getElementById('data').innerHTML = output;
+    document.getElementById('attendanceText').innerHTML = output;
 }
 
 fetchTrackerData();
