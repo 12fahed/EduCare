@@ -109,7 +109,7 @@ app.post("/signup", async (req, res)=>{
         console.log(email)
         //NODEMAILER ENDS
 
-        res.render("home", { fname: req.body.fname });
+        res.render("home", { fname: req.body.fname , email: req.body.email, insti: req.body.insti});
     }
     else{
         res.send("Mistach Password")
@@ -130,7 +130,9 @@ app.post("/login", async (req, res)=>{
             
             const username = await collection.findOne({email: "fahedpc12092004@gmail.com"}, {fname: 1})
             console.log(username)
-            res.render("home", { fname: check.fname });
+
+            res.render("midlogin", { fname: check.fname,  email: check.email, insti: check.insti});
+        
         }
         else{
             res.send("Wrong Password")
