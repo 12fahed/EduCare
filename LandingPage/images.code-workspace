@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "images",
+			"path": "../../../Downloads/education website assets/images"
+		},
+		{
+			"name": "LandingPage",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "LandingPage"
+	}
+}
