@@ -48,6 +48,10 @@ app.post("/signup", async (req, res)=>{
     const confirm = req.body.confirm
 
     if(pass===confirm){
+        const fname =  req.body.fname
+        const email = req.body.email
+        const insti = req.body.insti
+        
         const data = {
             email: req.body.email,
             password: await hashpass(req.body.password),
@@ -62,6 +66,49 @@ app.post("/signup", async (req, res)=>{
     
         await collection.insertMany([data])
     
+        //NODEMAILER STARTS
+
+        function create_random_string(string_length){
+            var random_String ="";
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
+            for(var i =0; i< string_length; i++){
+                random_String += characters.charAt(Math.floor(Math.random() *characters.length))
+            }
+            return random_String
+        }
+
+        var key = create_random_string(10);
+
+        var html=`Hello ${fname}, You are receiving this email as an acknowledgement that you have created an Institute Account with name ${insti}, your key is ${key}`
+
+        var nodemailer = require('nodemailer');
+
+        var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'educare.notification@gmail.com',
+            pass: 'hjtofjqmlgaeswqq'
+        }
+        });
+
+        var mailOptions = {
+        from: 'educare.notification@gmail.com',
+        to: email,
+        subject: 'Welcome to EduCare',
+        text: 'Hello and Welcome to Educare, your key',
+        html: html
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+        });
+        console.log(email)
+        //NODEMAILER ENDS
+
         res.render("home", { fname: req.body.fname });
     }
     else{
