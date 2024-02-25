@@ -8,6 +8,7 @@ from PIL import Image
 from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
 import gridfs
+from flask import jsonify
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
@@ -196,14 +197,6 @@ def recognize():
                     id = names[id]
                     confidence = "  {0}%".format(round(100 - confidence))
                     
-                    # attendance_data = {
-                    #     "date": datetime.now().strftime("%Y-%m-%d"),
-                    #     "time": datetime.now().strftime("%H:%M:%S"),
-                    #     "face_id": id,
-                    #     "present": True,
-                    #     "attendence": {"p": 20, "c": 40, "m": 10, "b": 45} 
-                    # }
-                    # db.attendance.insert_one(attendance_data)
                     document=db.attendance.find_one({"face_id": id})
                     phy=document.get("attend").get("p")
                     chem=document.get("attend").get("c")
@@ -239,8 +232,7 @@ def recognize():
                 print("\n\tExiting Program")
                 cam.release()
                 cv2.destroyAllWindows()
-                return render_template("")
-                break
+                return render_template("./recognize.html")
             
             cv2.imshow('camera', img) #showing the camera
 
@@ -257,5 +249,13 @@ def recognize():
     
     
     return render_template("./recognize.html")
+
+
+@app.route("/tracker", methods=["GET", "POST"])
+def tracker():
+    id=request.form.get("roll_no")
+    document=db.attendance.find_one({"face_id": id})
+    return jsonify(document)
+    
 
 app.run(debug=True)

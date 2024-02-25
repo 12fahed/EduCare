@@ -35,7 +35,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                <a class="nav-link active" aria-current="page" href="http://127.0.0.1:5500/LandingPage/index.html">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="#">About</a>
@@ -47,7 +47,7 @@
                                 <a class="nav-link active" aria-current="page" href="#">Contact</a>
                             </li>
                         </ul>
-                        <button onclick="redirectToPort();" class="btn btn-outline-success" type="submit" style="text-decoration: none;">Proceed to meeting</button>
+                        <button onclick="redirectToPort();" class="btn btn-outline-success" type="submit"><a target="_blank" style="text-decoration: none;">Proceed to meeting</a></button>
                     </div>    
                 </div>    
             </div>
@@ -63,14 +63,16 @@
                 <option value="maths">Maths</option>
                 <option value="biology">Biology</option>
             </select> &emsp;&emsp;&emsp;&emsp;
-            <button style="font-weight:450" type="submit" class="btn btn-outline-info btn-lg" action="">Verify Face</button>          
+            <button style="font-weight:450" type="submit" class="btn btn-outline-info btn-lg">Verify Face</button>          
         </div>
     </form>
 
     {% with messages = get_flashed_messages() %} 
         {% if messages %} 
             {% for message in messages %}
-                <p>{{ message }}</p>
+            <div class="container">
+                <p class="text-white">{{ message }}</p>
+            </div>
             {% endfor %} 
         {% endif %} 
     {% endwith %}
