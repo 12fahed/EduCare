@@ -239,6 +239,7 @@ def recognize():
                 print("\n\tExiting Program")
                 cam.release()
                 cv2.destroyAllWindows()
+                return render_template("")
                 break
             
             cv2.imshow('camera', img) #showing the camera
