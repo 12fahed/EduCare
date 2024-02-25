@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chart</title>
-    <link rel="stylesheet" href="chat.css">
+    <link rel="stylesheet" href="chart.css">
 
     <style>
         .product-stats {
@@ -34,17 +34,19 @@
         }
       </style>
       
+      
+
 </head>
 <body>
     <br>
     <div>
-        <label for="chartType">Select Chart Type:</label>
+        <label for="chartType"><b>Select what you want to view:</b></label>
         <select id="chartType" onchange="toggleChart()">
             <option value="" disabled selected>Select a Chart</option>
-            <option value="barchart">Bar Chart</option>
-            <option value="doughnut">Doughnut Chart</option>
-            <option value="line">Line Chart</option>
-            <option value="polar">Polar Chart</option>
+            <option value="barchart">No of Lectures</option>
+            <option value="doughnut">Percentage of Attendance</option>
+            <option value="line">Progress</option>
+            <option value="polar">Activities</option>
             <option value="all">All</option>
 
         </select>
@@ -77,61 +79,59 @@
           <!-- <h2 class="heading">Top Selling Product</h2> -->
           <table class="top-selling-products" height="100%" width="100%" style="background-color: #d4bdde;">
             <tr>
-              <th style="color: #fff;">ID</th>
-              <th style="color: #fff;">Task</th>
-              <th style="color: #fff;">ETA</th>
+              <th style="color: #fff;">Date</th>
+              <th style="color: #fff;">Lecture</th>
+              <th style="color: #fff;">Timing</th>
               <!-- <th style="color: #fff;">Sold</th> -->
             </tr>
 
             <tr>
-              <td>68231</td>
+              <td>2024-02-25</td>
               <td>
                 <div class="product-name flex">
                   <div class="icon">
                     <ion-icon name="logo-amazon"></ion-icon>
                   </div>
-                  <p>Lights to be installed</p>
+                  <p>Physics</p>
                 </div>
               </td>
-              <td>3 days</td>
+              <td>12:00 - 14:00</td>
               <!-- *<td>351</td> -->
             </tr>
 
             <tr>
-              <td>68231</td>
+              <td>2024-02-25</td>
               <td>
                 <div class="product-name iphone flex">
                   <div class="icon">
                     <ion-icon name="logo-apple"></ion-icon>
                   </div>
-                  <p>Door handle installation</p>
+                  <p>Chemistry</p>
                 </div>
               </td>
-              <td>1 hour</td>
+              <td>14:05 - 16:00</td>
               <!-- <td>121</td> -->
             </tr>
 
             <tr>
-              <td>68231</td>
+              <td>2024-02-25</td>
               <td>
                 <div class="product-name windows flex">
                   <div class="icon">
                     <ion-icon name="logo-microsoft"></ion-icon>
                   </div>
-                  <p>TV cabinet</p>
+                  <p>Maths</p>
                 </div>
               </td>
-              <td>15 days</td>
+              <td>16:05 - 17:00</td>
               <!-- <td>195</td> -->
             </tr>
           </table>
         </div>
       </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>>
-  
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="chart.js"></script>
-
 </script>
 <script>
     function toggleChart() {
@@ -144,6 +144,10 @@
         document.getElementById("lineContainer").style.display = "none";
         document.getElementById("polarContainer").style.display = "none";
 
+
+
+
+
         if(selectedChart=="all"){
         document.getElementById("barchartContainer").style.display = "block";
         document.getElementById("doughnutContainer").style.display = "block";
@@ -152,32 +156,11 @@
 
         }
 
-        // Show the selected chart
-        document.getElementById(selectedChart + "Container").style.display = "block";
+                // Show the selected chart
+                document.getElementById(selectedChart + "Container").style.display = "block";
     }
 </script>
     
-<script>
-  // Place this code in a <script> tag in your HTML file or include it in a separate JavaScript file
-
-// Fetch data from server
-fetch('/sales')
-    .then(response => response.json())
-    .then(data => {
-        // Update Chart.js configuration with fetched data
-        const labels = data.map(item => item.label);
-        const values = data.map(item => item.value);
-
-        // Update bar chart
-        barchart.data.labels = labels;
-        barchart.data.datasets[0].data = values;
-        barchart.update();
-
-        // Repeat the above for other charts (doughnut, line, polar)
-    })
-    .catch(error => console.error('Error fetching data:', error));
-
-</script>    
-
+    
 </body>
 </html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Room System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="cards-container">
+        <div class="card">
+            <h2 style="color: #2e3267;">Create a Room</h2>
+            <div class="form-group">
+                <label for="roomName">Room Name:</label>
+                <input type="text" id="roomName" placeholder="Enter room name">
+            </div>
+
+            <div class="form-group">
+                <label for="roomCode">Room Code:</label>
+                <input type="password" id="roomCode" placeholder="Enter room code">
+            </div>
+
+            <button class="btn-primary" onclick="createRoom()">Create Room</button>
+        </div>
+
+        <div class="card">
+            <h2 style="color: #2e3267;">Join a Room</h2>
+            <div class="form-group">
+                <label for="joinRoomName">Room Name:</label>
+                <input type="text" id="joinRoomName" placeholder="Enter room name">
+            </div>
+
+            <div class="form-group">
+                <label for="joinRoomCode">Room Code:</label>
+                <input type="password" id="joinRoomCode" placeholder="Enter room code">
+            </div>
+
+            <button class="btn-primary" onclick="joinRoom()">Join Room</button>
+        </div>
+    </div>
+
+    <div class="room-content">
+        <hr>
+        <h2>Room Content</h2>
+        <p id="roomContent">This is the default content for the room.</p>
+    </div>
+</div>
+
+
+<script>
+    // Define room content mapping
+    const roomContentMapping = {
+        '1234': 'Content for Room 1. Customize as needed.',
+        '2004': 'Content for Room 2. Customize as needed.',
+        '2303': 'Content for Room 2. Customize as needed.',
+        '5678': 'Content for Room 2. Customize as needed.',
+        '9999': 'Content for Room 2. Customize as needed.',
+        // Add more rooms as needed
+    };
+
+    // Define room code to URL mapping
+    const roomCodeUrlMapping = {
+        '1234': 'http://127.0.0.1:5500/room-content/room_content.html',
+        '2004': 'http://127.0.0.1:5500/room-content%20-%202/room_content.html',
+        '2303': 'http://127.0.0.1:5500/room-content%20-%203/room_content.html',
+        '5678': 'http://127.0.0.1:5500/room-content%20-%204/room_content.html',
+        '9999': 'http://127.0.0.1:550/room-content%20-%205/room_content.html',
+        // Add more room code to URL mappings
+    };
+
+    // Function to create a room
+    function createRoom() {
+        const roomName = document.getElementById('roomName').value;
+        const roomCode = document.getElementById('roomCode').value;
+
+        if (roomName && roomCode) {
+            // Store the new room in local storage
+            localStorage.setItem(roomCode, roomName);
+
+            alert('Room created successfully!');
+            redirectToNewPage(roomCode); // Redirect after creating a room
+        } else {
+            alert('Please enter both room name and code.');
+        }
+    }
+
+    // Function to join a room
+    function joinRoom() {
+        const joinRoomCode = document.getElementById('joinRoomCode').value;
+        const roomName = localStorage.getItem(joinRoomCode);
+        const roomContent = roomContentMapping[joinRoomCode];
+
+        if (roomName && roomContent) {
+            alert('Successfully joined the room!');
+            showRoomContent(roomName, roomContent);
+            redirectToNewPage(joinRoomCode); // Redirect after joining a room
+        } else {
+            alert('Invalid room code. Please try again.');
+        }
+    }
+
+    // Function to show the room content
+    function showRoomContent(roomName, roomContent) {
+        document.querySelector('.room-content').style.display = 'block';
+        document.getElementById('roomContent').innerText = roomContent;
+    }
+
+    // Function to redirect to a new page based on room code
+    function redirectToNewPage(roomCode) {
+        const redirectUrl = roomCodeUrlMapping[roomCode];
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        } else {
+            alert('Invalid room code for redirection.');
+        }
+    }
+</script>
+
+</body>
+</html>

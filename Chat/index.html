@@ -1,0 +1,218 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Chat</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500&family=Raleway:wght@200;300;500;600&display=swap');
+/* styles.css */
+
+/* styles.css */
+
+/* styles.css */
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: white; /* Dark background color */
+  color: #fff; /* Text color */
+  margin: 0;
+  padding: 0;
+}
+
+#usernameForm,
+#chat {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#usernameForm label,
+#chat button {
+  display: block;
+  margin-bottom: 10px;
+  color: #333; /* Text color for dark theme */
+}
+
+#usernameForm input,
+#form input,
+#form button {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: calc(100% - 22px);
+  margin-bottom: 10px;
+}
+
+#usernameForm button,
+#form button {
+  background-color: #27282c;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 20px;
+  font-size: 16px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#usernameForm button:hover {
+  background-color: #111113;
+}
+
+#chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#users {
+  color: #27282c;
+  font-weight: bold;
+}
+
+#messages {
+  list-style: none;
+  padding: 0;
+  max-height: 400px; /* Set a maximum height for the chat container */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+#messages li {
+  margin-bottom: 10px;
+}
+
+#logout {
+  background-color: #dc3545;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+}
+
+#logout:hover {
+  background-color: #c82333;
+}
+
+.currentUserMessage {
+  color: #27282c;
+  background-color: #b2bbc5;
+  /* Change this to the desired color for the current user's messages */
+  border-radius: 10px;
+  padding: 8px;
+  margin-left: auto; /* Align right for current user's messages */
+}
+
+.otherUserMessage {
+  color: #fff;
+  background-color: #333; /* Dark background color */
+  /* Change this to the desired color for other user's messages */
+  border-radius: 10px;
+  padding: 8px;
+  margin-right: auto; /* Align left for received messages */
+}
+
+.username {
+  font-weight: bold;
+  /* You can add other styles as needed */
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  #usernameForm,
+  #chat {
+    margin: 10px;
+  }
+}
+
+  
+  </style>
+</head>
+<body>
+  <div id="usernameForm">
+    <form id="usernameSetForm" action="">
+      <label for="username">Choose a Username: </label>
+      <input id="username" autocomplete="off" required />
+      <button type="submit">Set Username</button>
+    </form>
+  </div>
+
+  <div id="chat" style="display:none;">
+    <div id="chat-header">
+      <div id="users"></div>
+      <button id="logout">Logout</button>
+    </div>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="m" autocomplete="off" placeholder="Type here Something"/>
+      <button>Send</button>
+    </form>
+  </div>
+  
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    $(function () {
+      const socket = io();
+      const usernameForm = $('#usernameForm');
+      const chat = $('#chat');
+      const messages = $('#messages');
+      const users = $('#users');
+      const form = $('#form');
+      const m = $('#m');
+      const usernameSetForm = $('#usernameSetForm');
+      const logoutButton = $('#logout');
+      let currentUser = ''; // Variable to store the current user's chosen username
+
+      usernameSetForm.submit(function(e){
+        e.preventDefault();
+        currentUser = $('#username').val();
+        socket.emit('set username', currentUser);
+        usernameForm.hide();
+        chat.show();
+        return false;
+      });
+
+      form.submit(function(e){
+        e.preventDefault();
+        const message = m.val();
+        socket.emit('chat message', message);
+        m.val('');
+        return false;
+      });
+
+      logoutButton.click(function() {
+        // Show username form and hide chat
+        usernameForm.show();
+        chat.hide();
+        // Clear the current user
+        currentUser = '';
+        // Emit a disconnect event to the server (optional)
+        socket.disconnect();
+        // Reconnect to the server
+        socket.connect();
+      });
+
+      socket.on('chat message', function(data){
+  const messageBlock = (data.user === currentUser) ? `<li class="currentUserMessage"><span class="username">You:</span> ${data.message}</li>` : `<li class = "otherUserMessage"><span class="username">${data.user}:</span> ${data.message}</li>`;
+  messages.append($(messageBlock));
+});
+
+      socket.on('connected users', function(usersList){
+        const userList = usersList.map(user => user.username).join(', ');
+        users.text(`Connected Users: ${userList}`);
+      });
+    });
+  </script>
+</body>
+</html>
