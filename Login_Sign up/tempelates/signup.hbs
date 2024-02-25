@@ -4,18 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #424890, #6c63ff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #2e3267; /* Dark blue */
+        }
+        
+        form {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="date"], /* Added */
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="text"]:hover,
+        input[type="email"]:hover,
+        input[type="password"]:hover,
+        input[type="number"]:hover,
+        input[type="date"]:hover, /* Added */
+        select:hover {
+            border-color: #6c63ff; /* Light purple */
+        }
+        
+        input[type="submit"] {
+            background-color: #6c63ff; /* Light purple */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #424890; /* Dark purple */
+        }
+    </style>
 </head>
 <body>
 
-    <h2>Sign Up</h2>
+
     <form action="/signup" method="post">
         <input type="email" name="email" placeholder="Enter Email">
-        <input type="password" name="password" placeholder="password">
-        <input type="password" name="confirm" placeholder="Confirm password">
+        <input type="password" name="password" placeholder="Password">
+        <input type="password" name="confirm" placeholder="Confirm Password">
         <input type="text" name="fname" placeholder="Enter First Name">
         <input type="text" name="mname" placeholder="Enter Middle Name">
         <input type="text" name="lname" placeholder="Enter Last Name">
-        <input type="date" name="dob" placeholder="Enter DOB">
+        <input type="date" name="dob" placeholder="Enter Date of Birth">
         <input type="number" name="phno" placeholder="Enter Phone Number">
         <input type="text" name="insti" placeholder="Enter Institute">
         <select id="dropdown" name="dropdown">
@@ -23,7 +86,7 @@
             <option value="Teacher">Teacher</option>
             <option value="Student">Student</option>
         </select>
-        <input type="submit">
+        <input type="submit" value="Submit">
     </form>
     
 </body>

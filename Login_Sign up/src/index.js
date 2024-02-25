@@ -128,7 +128,9 @@ app.post("/login", async (req, res)=>{
 
         if( ( check && passCheck ) && role){
             
-            res.render("home")
+            const username = await collection.findOne({email: "fahedpc12092004@gmail.com"}, {fname: 1})
+            console.log(username)
+            res.render("home", { fname: check.fname });
         }
         else{
             res.send("Wrong Password")
