@@ -26,7 +26,7 @@ To begin with the project, follow these steps:
 
 4. **Terminal of LandingPage**
     - Open `startingPage.html` with live Server.
-    - 
+      
 5. **Terminal of ChatBot**
     - Make sure you have Python installed on your system.
     - Install required Python packages:
