@@ -12,6 +12,7 @@ const tempelatePath = path.join(__dirname, '../tempelates')
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(express.static('public/img'))
 app.set("view engine", "hbs")
 app.set("views", tempelatePath)
 app.use(express.urlencoded({extended: false}))
