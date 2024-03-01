@@ -1,3 +1,24 @@
+document.addEventListener('DOMContentLoaded', function () {
+    // Fetching data from the backend using Fetch API
+    fetch('/data')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Modify your chart data here using the fetched data
+            // For example, if your chart data is an array, you can update it like this:
+            barchart.data.datasets[0].data = data;
+            // Update the chart
+            barchart.update();
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+});
+
 const ctx = document.getElementById('barchart').getContext('2d');
 const barchart = new Chart(ctx, {
     type: 'bar',
