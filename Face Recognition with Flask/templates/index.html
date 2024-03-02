@@ -10,14 +10,15 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+        <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     </head>
-    <body class="mt-2 mb-5" style="font-family: 'Montserrat', sans-serif; background-color: #1f2641">
+    <body class="mt-0 mb-5" style="font-family: 'Montserrat', sans-serif; background-color: #1f2641">
 
-        <div class="container">
+        <div>
             <nav
                 class="navbar navbar-expand-lg mb-2"
                 data-bs-theme="dark"
-                style="background-color: #1f2641"
+                style="background-color: #363f5f;"
             >
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#" style="font-weight: bold">Educare</a>
@@ -47,19 +48,25 @@
                                 <a class="nav-link active" aria-current="page" href="#">Contact</a>
                             </li>
                         </ul>
-                        <form action="">
-                            <div style="display: flex; justify-content: center; align-items: center; text-align: center;" >
-                                <p class="text-white" style="font-size: 1rem; justify-content:center" >Already registered ➡️</p>
-                                <button class="btn btn-outline-success" type="submit"><a style="text-decoration: none; color: white;" href="/collect">Verify</a></button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </nav>
         </div>
 
+        <br><br><br>
+
+        <form action="">
+            <div class="container">
+                <p class="text-white" style="font-size: 1.5rem; justify-content:center" >Already registered ➡️</p>
+                <button class="btn btn-outline-success" type="submit"><a style="text-decoration: none; color: white;" href="/collect">Verify</a></button>
+            </div>
+        </form>
+
+        <br><br><br><br><br>
+
         <form action="/collect" method="post" enctype="multipart/form-data">
             <div class="container my-5">
+                <p class="text-white" style="font-size: 1.5rem; justify-content:center">Left to register? ➡️</p>
                 <div class="mb-3">
                     <label for="basic-url" class="form-label text-light w-25"
                         >Enter your roll number</label

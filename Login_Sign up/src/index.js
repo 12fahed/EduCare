@@ -9,10 +9,11 @@ const bcryptjs = require("bcryptjs")
 const { constants } = require("buffer")
 
 const tempelatePath = path.join(__dirname, '../tempelates')
-
+const imgPath = path.join(__dirname,'../public')
 app.use(express.json())
 app.use(cookieParser())
-app.use(express.static('public/img'))
+// app.use(express.static('public'),'public')
+app.use(express.static(imgPath))
 app.set("view engine", "hbs")
 app.set("views", tempelatePath)
 app.use(express.urlencoded({extended: false}))

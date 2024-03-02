@@ -11,13 +11,13 @@
             crossorigin="anonymous"
         />
     </head>
-    <body class="mt-2 mb-5" style="font-family: 'Montserrat', sans-serif; background-color: #1f2641">
+    <body class="mt-0 mb-5" style="font-family: 'Montserrat', sans-serif; background-color: #1f2641">
 
-        <div class="container">
+        <div>
             <nav
                 class="navbar navbar-expand-lg mb-2"
                 data-bs-theme="dark"
-                style="background-color: #1f2641"
+                style="background-color: #363f5f"
             >
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#" style="font-weight: bold">Educare</a>
@@ -54,8 +54,10 @@
         </div>
     </nav>
 
+    <br><br>
+
     <form action="/recognize" method="post" enctype="multipart/form-data">
-        <div class="container mt-5">
+        <div class="container mt-5 mx-auto" style="width: max-content">
             <label for="subject" class="text-white">Select subject:</label>
             <select id="subject" name="subject" class="">
                 <option value="physics" selected>Physics</option>
@@ -70,8 +72,9 @@
     {% with messages = get_flashed_messages() %} 
         {% if messages %} 
             {% for message in messages %}
-            <div class="container">
-                <p class="text-white">{{ message }}</p>
+            <br><br>
+            <div class="container" style="width: 40%; margin: 50px auto; background-color: #1d1879; padding: 13px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); text-align: center; align-items: center; justify-content: center">
+                <p class="text-white" style="font-size: 1.15rem;">{{ message }}</p>
             </div>
             {% endfor %} 
         {% endif %} 
